@@ -13,5 +13,7 @@
 + (instancetype)synchronousChannel;
 
 - (void)put:(id)obj;
-- (id)take;
+
+@property (nonatomic, readonly, strong) id take;
+
 @end

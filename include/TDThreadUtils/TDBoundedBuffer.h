@@ -11,11 +11,13 @@
 @interface TDBoundedBuffer : NSObject <TDChannel>
 
 + (instancetype)boundedBufferWithSize:(NSUInteger)size;
-- (instancetype)initWithSize:(NSUInteger)size;
+- (instancetype)initWithSize:(NSUInteger)size NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (void)put:(id)obj;
-- (id)take;
-
 - (void)put:(id)obj beforeDate:(NSDate *)date;
 - (id)takeBeforeDate:(NSDate *)date;
+
+@property (nonatomic, readonly, strong) id take;
+
 @end

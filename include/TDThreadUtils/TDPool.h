@@ -11,9 +11,11 @@
 @interface TDPool : NSObject
 
 + (instancetype)poolWithItems:(NSArray *)items;
-- (instancetype)initWithItems:(NSArray *)items;
+- (instancetype)initWithItems:(NSArray *)items NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
 
-- (id)takeItem;
 - (void)returnItem:(id)obj;
+
+@property (nonatomic, readonly, strong) id takeItem;
 
 @end

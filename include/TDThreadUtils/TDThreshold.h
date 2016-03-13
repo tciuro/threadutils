@@ -11,7 +11,9 @@
 @interface TDThreshold : NSObject
 
 + (instancetype)thresholdWithValue:(NSInteger)value;
-- (instancetype)initWithValue:(NSInteger)value;
+- (instancetype)initWithValue:(NSInteger)value NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
 
 - (void)await;
+
 @end

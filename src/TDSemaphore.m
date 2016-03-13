@@ -28,37 +28,28 @@
 @implementation TDSemaphore
 
 + (instancetype)semaphoreWithValue:(NSInteger)value {
-    return [[[self alloc] initWithValue:value] autorelease];
+    return [[self alloc] initWithValue:value];
 }
-
 
 - (instancetype)initWithValue:(NSInteger)value {
     self = [super init];
     if (self) {
         self.value = value;
-        self.monitor = [[[NSCondition alloc] init] autorelease];
+        self.monitor = [[NSCondition alloc] init];
     }
     return self;
 }
 
-
-- (void)dealloc {
-    self.monitor = nil;
-    [super dealloc];
-}
-
+- (instancetype)init { @throw nil; }
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<%@ %p %ld>", [self class], self, _value];
 }
 
-
 #pragma mark -
 #pragma mark Public
 
 - (BOOL)attempt {
-    [[self retain] autorelease];
-    
     [self lock];
     
     BOOL success = [self available];
@@ -72,10 +63,8 @@
     return success;
 }
 
-
 - (BOOL)attemptBeforeDate:(NSDate *)limit {
     NSParameterAssert([self isValidDate:limit]);
-    [[self retain] autorelease];
     
     [self lock];
     
@@ -94,9 +83,7 @@
     return success;
 }
 
-
 - (void)acquire {
-    [[self retain] autorelease];
     [self lock];
     
     while (![self available]) {
@@ -107,9 +94,7 @@
     [self unlock];
 }
 
-
 - (void)relinquish {
-    [[self retain] autorelease];
     [self lock];
     [self increment];
 
@@ -120,7 +105,6 @@
     [self unlock];
 }
 
-
 #pragma mark -
 #pragma mark Private Business
 
@@ -128,16 +112,13 @@
     self.value--;
 }
 
-
 - (void)increment {
     self.value++;
 }
 
-
 - (BOOL)available {
     return _value > 0;
 }
-
 
 #pragma mark -
 #pragma mark Private Convenience
@@ -147,34 +128,29 @@
     [_monitor lock];
 }
 
-
 - (void)unlock {
     NSAssert(_monitor, @"");
     [_monitor unlock];
 }
-
 
 - (void)wait {
     NSAssert(_monitor, @"");
     [_monitor wait];
 }
 
-
 - (void)waitUntilDate:(NSDate *)date {
     NSAssert(_monitor, @"");
     [_monitor waitUntilDate:date];
 }
-
 
 - (void)signal {
     NSAssert(_monitor, @"");
     [_monitor signal];
 }
 
-
 - (BOOL)isValidDate:(NSDate *)limit {
     NSParameterAssert(limit);
-    return [limit timeIntervalSinceNow] > 0.0;
+    return limit.timeIntervalSinceNow > 0.0;
 }
 
 @end

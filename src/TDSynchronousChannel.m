@@ -19,9 +19,8 @@
 @implementation TDSynchronousChannel
 
 + (instancetype)synchronousChannel {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
-
 
 - (instancetype)init {
     self = [super init];
@@ -32,16 +31,6 @@
     }
     return self;
 }
-
-
-- (void)dealloc {
-    self.putPermit = nil;
-    self.takePermit = nil;
-    self.taken = nil;
-    self.item = nil;
-    [super dealloc];
-}
-
 
 - (void)put:(id)obj {
     NSParameterAssert(obj);
@@ -58,7 +47,6 @@
     [_taken acquire]; // wait for someone to take it
 }
 
-
 - (id)take {
     NSAssert(_putPermit, @"");
     NSAssert(_takePermit, @"");
@@ -66,7 +54,8 @@
     
     [_takePermit acquire];
     NSAssert(_item, @"");
-    id obj = [[_item retain] autorelease];
+#warning [What to do here?]
+    id obj = _item;//[[_item retain] autorelease];
     self.item = nil;
     [_putPermit relinquish];
     

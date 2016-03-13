@@ -13,9 +13,10 @@
 
 + (instancetype)interpreterSync;
 
-- (id)awaitPause;
 - (void)pauseWithInfo:(id)info;
-
-- (id)awaitResume;
 - (void)resumeWithInfo:(id)info;
+
+@property (nonatomic, readonly, strong) id awaitPause;
+@property (nonatomic, readonly, strong) id awaitResume;
+
 @end

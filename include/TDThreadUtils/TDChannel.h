@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @protocol TDChannel <NSObject>
+
 - (void)put:(id)obj;
-- (id)take;
+
+@property (nonatomic, readonly, strong) id take;
+
 @end

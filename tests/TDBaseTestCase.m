@@ -14,15 +14,9 @@
 
 @implementation TDBaseTestCase
 
-- (void)dealloc {
-    self.done = nil;
-    self.threshold = nil;
-    [super dealloc];
-}
-
 - (void)setUp {
     [super setUp];
-    [[NSThread currentThread] setName:@"MAIN"];
+    [NSThread currentThread].name = @"MAIN";
     
     self.threadCounter = 0;
 
@@ -73,7 +67,7 @@
 }
 
 - (void)nameCurrentBackgroundThread { // PRE: lock held
-    [[NSThread currentThread] setName:[NSString stringWithFormat:@"BG#%lu", ++self.threadCounter]];
+    [NSThread currentThread].name = [NSString stringWithFormat:@"BG#%lu", ++self.threadCounter];
 }
 
 @synthesize done=done;

@@ -25,31 +25,24 @@
 @implementation TDThreshold
 
 + (instancetype)thresholdWithValue:(NSInteger)value {
-    return [[[self alloc] initWithValue:value] autorelease];
+    return [[self alloc] initWithValue:value];
 }
-
 
 - (instancetype)initWithValue:(NSInteger)value {
     self = [super init];
     if (self) {
         self.value = value;
-        self.monitor = [[[NSCondition alloc] init] autorelease];
+        self.monitor = [[NSCondition alloc] init];
     }
     return self;
 }
 
-
-- (void)dealloc {
-    self.monitor = nil;
-    [super dealloc];
-}
-
+- (instancetype)init { @throw nil; }
 
 #pragma mark -
 #pragma mark TDSync 
 
 - (void)await {
-    [[self retain] autorelease];
     [self lock];
     
     [self decrement];
@@ -65,7 +58,6 @@
     [self unlock];
 }
 
-
 #pragma mark -
 #pragma mark Private Business
 
@@ -73,11 +65,9 @@
     self.value--;
 }
 
-
 - (BOOL)reached {
     return _value <= 0;
 }
-
 
 #pragma mark -
 #pragma mark Private Convenience
@@ -87,18 +77,15 @@
     [_monitor lock];
 }
 
-
 - (void)unlock {
     NSAssert(_monitor, @"");
     [_monitor unlock];
 }
 
-
 - (void)wait {
     NSAssert(_monitor, @"");
     [_monitor wait];
 }
-
 
 - (void)broadcast {
     NSAssert(_monitor, @"");

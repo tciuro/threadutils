@@ -33,13 +33,6 @@
     return self;
 }
 
-
-- (void)dealloc {
-    self.array = nil;
-    [super dealloc];
-}
-
-
 - (void)insert:(id)obj {
     NSParameterAssert(obj);
     NSAssert(_array, @"");
@@ -53,13 +46,12 @@
     NSAssert(_putIndex < _size, @"");
 }
 
-
 - (id)extract {
     NSAssert(_array, @"");
     
     id obj = nil;
     @synchronized(self) {
-        obj = [[_array[_takeIndex] retain] autorelease];
+        obj = _array[_takeIndex];
         [_array removeObjectAtIndex:_takeIndex];
         self.takeIndex = (_takeIndex + 1) % _size;
     }
@@ -71,7 +63,6 @@
 
 @end
 
-
 @interface TDBoundedBuffer ()
 @property (retain) TDBufferArray *buffer;
 @property (retain) TDSemaphore *putPermits;
@@ -81,30 +72,22 @@
 @implementation TDBoundedBuffer
 
 + (instancetype)boundedBufferWithSize:(NSUInteger)size {
-    return [[(TDBoundedBuffer *)[self alloc] initWithSize:size] autorelease];
+    return [(TDBoundedBuffer *)[self alloc] initWithSize:size];
 }
-
 
 - (instancetype)initWithSize:(NSUInteger)size {
     NSParameterAssert(NSNotFound != size);
     NSParameterAssert(size > 0);
     self = [super init];
     if (self) {
-        self.buffer = [[[TDBufferArray alloc] initWithSize:size] autorelease];
+        self.buffer = [[TDBufferArray alloc] initWithSize:size];
         self.putPermits = [TDSemaphore semaphoreWithValue:size];
         self.takePermits = [TDSemaphore semaphoreWithValue:0];
     }
     return self;
 }
 
-
-- (void)dealloc {
-    self.buffer = nil;
-    self.putPermits = nil;
-    self.takePermits = nil;
-    [super dealloc];
-}
-
+- (instancetype)init { @throw nil; }
 
 - (void)put:(id)obj {
     NSParameterAssert(obj);
@@ -116,7 +99,6 @@
     [_buffer insert:obj];
     [_takePermits relinquish];
 }
-
 
 - (id)take {
     NSAssert(_buffer, @"");
@@ -131,7 +113,6 @@
     return obj;
 }
 
-
 - (void)put:(id)obj beforeDate:(NSDate *)date {
     NSParameterAssert(obj);
     NSAssert(_buffer, @"");
@@ -142,7 +123,6 @@
     [_buffer insert:obj];
     [_takePermits relinquish];
 }
-
 
 - (id)takeBeforeDate:(NSDate *)date {
     NSAssert(_buffer, @"");

@@ -18,15 +18,14 @@
 @implementation TDPool
 
 + (instancetype)poolWithItems:(NSArray *)items {
-    return [[[self alloc] initWithItems:items] autorelease];
+    return [[self alloc] initWithItems:items];
 }
-
 
 - (instancetype)initWithItems:(NSArray *)items {
     NSParameterAssert(items);
     self = [super init];
     if (self) {
-        NSUInteger size = [items count];
+        NSUInteger size = items.count;
         NSAssert(NSNotFound != size, @"");
         NSAssert(size > 0, @"");
 
@@ -37,14 +36,7 @@
     return self;
 }
 
-
-- (void)dealloc {
-    self.permits = nil;
-    self.available = nil;
-    self.busy = nil;
-    [super dealloc];
-}
-
+- (instancetype)init { @throw nil; }
 
 #pragma mark -
 #pragma mark Public
@@ -58,7 +50,6 @@
     return obj;
 }
 
-
 - (void)returnItem:(id)obj {
     NSParameterAssert(obj);
     
@@ -68,7 +59,6 @@
     }
 }
 
-
 #pragma mark -
 #pragma mark Private
 
@@ -77,7 +67,8 @@
     
     @synchronized(self) {
         NSAssert([_available count], @"");
-        obj = [[[_available lastObject] retain] autorelease];
+#warning [What to do here?]
+        obj = _available.lastObject;//[[_available.lastObject retain] autorelease];
         [_available removeLastObject];
         
         NSAssert(_busy, @"");
@@ -87,7 +78,6 @@
     
     return obj;
 }
-
 
 - (BOOL)doReturn:(id)obj {
     NSParameterAssert(obj);

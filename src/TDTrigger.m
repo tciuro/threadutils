@@ -23,31 +23,22 @@
 @implementation TDTrigger
 
 + (instancetype)trigger {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
-
 
 - (instancetype)init {
     self = [super init];
     if (self) {
         self.fired = NO;
-        self.monitor = [[[NSCondition alloc] init] autorelease];
+        self.monitor = [[NSCondition alloc] init];
     }
     return self;
 }
-
-
-- (void)dealloc {
-    self.monitor = nil;
-    [super dealloc];
-}
-
 
 #pragma mark -
 #pragma mark TDSync 
 
 - (void)await {
-    [[self retain] autorelease];
     [self lock];
     
     while (!self.fired) {
@@ -57,9 +48,7 @@
     [self unlock];
 }
 
-
 - (void)fire {
-    [[self retain] autorelease];
     [self lock];
     
     self.fired = YES;
@@ -69,7 +58,6 @@
     [self unlock];
 }
 
-
 #pragma mark -
 #pragma mark Private Convenience
 
@@ -78,18 +66,15 @@
     [_monitor lock];
 }
 
-
 - (void)unlock {
     NSAssert(_monitor, @"");
     [_monitor unlock];
 }
 
-
 - (void)wait {
     NSAssert(_monitor, @"");
     [_monitor wait];
 }
-
 
 - (void)broadcast {
     NSAssert(_monitor, @"");

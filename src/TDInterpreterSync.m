@@ -17,9 +17,8 @@
 @implementation TDInterpreterSync
 
 + (instancetype)interpreterSync {
-    return [[[self alloc] init] autorelease];
+    return [[self alloc] init];
 }
-
 
 - (instancetype)init {
     self = [super init];
@@ -30,31 +29,20 @@
     return self;
 }
 
-
-- (void)dealloc {
-    self.pauseChannel = nil;
-    self.resumeChannel = nil;
-    [super dealloc];
-}
-
-
 - (id)awaitPause {
     NSAssert(_pauseChannel, @"");
     return [_pauseChannel take];
 }
-
 
 - (void)pauseWithInfo:(id)info {
     NSAssert(_pauseChannel, @"");
     [_pauseChannel put:info];
 }
 
-
 - (id)awaitResume {
     NSAssert(_resumeChannel, @"");
     return [_resumeChannel take];
 }
-
 
 - (void)resumeWithInfo:(id)info {
     NSAssert(_resumeChannel, @"");

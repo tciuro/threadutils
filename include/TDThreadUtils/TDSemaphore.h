@@ -11,11 +11,14 @@
 @interface TDSemaphore : NSObject
 
 + (instancetype)semaphoreWithValue:(NSInteger)value;
-- (instancetype)initWithValue:(NSInteger)value;
+- (instancetype)initWithValue:(NSInteger)value NS_DESIGNATED_INITIALIZER;
+- (instancetype)init NS_UNAVAILABLE;
 
-- (BOOL)attempt; // returns success immediately
 - (BOOL)attemptBeforeDate:(NSDate *)limit; // returns success. can block up to limit
 
 - (void)acquire; // blocks forever
 - (void)relinquish; // returns immediately
+
+@property (nonatomic, readonly) BOOL attempt; // returns success immediately
+
 @end
